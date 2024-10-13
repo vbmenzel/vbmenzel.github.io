@@ -1,55 +1,90 @@
-/* styles.css */
+:root {
+    --background-color1: #eea4ea; /* Pastel pink */
+    --background-color2: #ffffff; /* White */
+    --background-color3: #92daf0; /* Pastel blue */
+    --container-color: #48a1bd; /* Pastel peach */
+    --user-message-color: #92daf0; /* Pastel yellow */
+    --bot-message-color: #eea4ea; /* Pastel red */
+    --input-background: #aae0f0; /* Deep teal */
+    --text-color: #fff; /* White text for better contrast */
+    --placeholder-color: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(255, 255, 255, 0.5);
+    --shadow-color: rgba(0, 0, 0, 0.2);
+
+    /* Gradient control variables */
+    --gradient-start: 0%; /* Start position of the gradient */
+    --gradient-end: 100%; /* End position of the gradient */
+    --gradient-middle: 50%; /* Middle position of the gradient */
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fbe9d0; /* Light background color */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    background-image: linear-gradient(
+        135deg,
+        var(--background-color1) var(--gradient-start),
+        var(--background-color2) var(--gradient-middle),
+        var(--background-color3) var(--gradient-end)
+    );
 }
 
 .chat-container {
-    width: 60%;
+    position: relative; /* Required for absolute positioning of the button */
+    width: 90%;
     max-width: 600px;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    background-color: #244855; /* Darker background color for the container */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px var(--shadow-color);
     display: flex;
     flex-direction: column;
-    height: 70vh;
-    color: #fbe9d0; /* Light text color */
+    height: 80vh;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .messages {
     flex: 1;
     overflow-y: auto;
     padding: 20px;
-    background-color: #90aead; /* Background color for message area */
-    border-bottom: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .messages div {
     margin-bottom: 10px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    max-width: 80%;
-    clear: both;
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 90%; /* Adjusted to use more of the space */
+    line-height: 1.5;
+    position: relative;
 }
 
 .messages .user {
-    background-color: #e64833; /* User message color */
+    background-color: var(--user-message-color);
     align-self: flex-end;
     text-align: right;
-    color: #fbe9d0; /* Light text color for better contrast */
+    color: #000000;
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .messages .bot {
-    background-color: #874f41; /* Bot message color */
+    background-color: var(--bot-message-color);
     align-self: flex-start;
     text-align: left;
-    color: #fbe9d0; /* Light text color for better contrast */
+    color: #000000;
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .user-input {
@@ -57,13 +92,97 @@ body {
     padding: 15px;
     font-size: 16px;
     outline: none;
-    border-top: 1px solid #ccc;
+    border-top: 2px solid var(--border-color);
     width: 100%;
     box-sizing: border-box;
-    background-color: #244855; /* Input background color */
-    color: #fbe9d0; /* Light input text color */
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+    transition: background-color 0.3s ease;
 }
 
 .user-input::placeholder {
-    color: #90aead; /* Placeholder text color */
+    color: var(--placeholder-color);
+}
+
+.user-input:focus {
+    background-color: #6ec8e4; /* Darker teal on focus */
+}
+
+#settingsButton {
+    position: absolute; /* Position the button absolutely */
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
+    background-color: transparent; /* Make background transparent */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+    padding: 5px; /* Add some padding */
+    transition: background-color 0.3s; /* Smooth background change */
+}
+
+#settingsButton:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
+}
+
+.settings-icon {
+    width: 24px; /* Set the icon width */
+    height: 24px; /* Set the icon height */
+}
+
+/* Overlay styles */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure overlay is on top */
+}
+
+.overlay-content {
+    background-color: var(--container-color); /* Use the container color for consistency */
+    color: var(--text-color); /* Set text color */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 20px; /* Adjust padding */
+    max-width: 90%; /* Limit max width */
+    color: #000; /* Input text color */
+}
+
+.overlay-content h2 {
+    margin-bottom: 15px; /* Spacing below the heading */
+}
+
+.overlay-content label {
+    display: block; /* Block display for labels */
+    margin: 10px 0 5px; /* Spacing for labels */
+}
+
+.overlay-content input[type="text"] {
+    width: calc(100% - 20px); /* Full width minus padding */
+    padding: 10px; /* Padding inside input */
+    border: 2px solid var(--border-color); /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    background-color: var(--input-background); /* Match input background */
+    color: #000; /* Input text color */
+    margin-bottom: 15px; /* Spacing below input */
+}
+
+.overlay-content button {
+    background-color: var(--user-message-color); /* Use a theme color */
+    color: #000; /* Input text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding inside buttons */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s; /* Smooth background change */
+}
+
+.overlay-content button:hover {
+    background-color: var(--bot-message-color); /* Darken on hover */
 }
