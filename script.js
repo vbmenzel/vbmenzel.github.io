@@ -14,7 +14,7 @@ function saveApiKey() {
         addMessage("API key saved successfully!", true);
         toggleSettings(); // Close the settings overlay
     }
-}
+}//
 
 async function respondToUser(inputText) {
     const success = await fetchChatGPTResponse(inputText);
