@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot with Weather Lookup</title>
+    <title>Chatbot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,8 +38,6 @@
     </div>
 
     <script>
-        const apiKey = 'ad1fda56fbe6a3555265a0a58dab4e5e'; // Replace with your OpenWeatherMap API key
-
         function addMessage(text, fromUser = false) {
             const messagesDiv = document.getElementById('messages');
             const newMessage = document.createElement('div');
@@ -59,52 +57,47 @@
 
         function respondToUser(inputText) {
             const greetingPattern = /\b(hi|hello|hey)\b/i;
-            const weatherPattern = /\b(weather|forecast)\b.*\b(in|at|for)\b.*\b([a-zA-Z]+)\b/i;
+            const mathPattern = /\b(calc|calculate)\b\s*([\d+\-*/().\s]+)/i;
+            const randomNumberPattern = /\brandom number\b/i;
+            const helpPattern = /\b(help|what can you do)\b/i;
 
             if (greetingPattern.test(inputText)) {
-                addMessage("Hello! How can I help you today?");
-            } else if (weatherPattern.test(inputText)) {
-                const location = inputText.match(weatherPattern)[3];
-                lookupWeather(location);
-            } else if (/test internet/i.test(inputText)) {
-                testInternetConnection();
+                addMessage("Hello! How can I assist you today?");
+            } else if (mathPattern.test(inputText)) {
+                const expression = inputText.match(mathPattern)[2];
+                calculate(expression);
+            } else if (randomNumberPattern.test(inputText)) {
+                generateRandomNumber();
+            } else if (helpPattern.test(inputText)) {
+                showHelp();
             } else {
                 addMessage("I'm not sure how to respond to that.");
             }
         }
 
-        function lookupWeather(location) {
-            const corsProxy = 'https://cors-anywhere.herokuapp.com/'; // Use a CORS proxy
-            const url = `${corsProxy}https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Location not found');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const weatherInfo = `The weather in ${data.name} is ${data.weather[0].description} with a temperature of ${data.main.temp}°C.`;
-                    addMessage(weatherInfo);
-                })
-                .catch(error => {
-                    addMessage("Could not find the weather for that location.");
-                });
+        function calculate(expression) {
+            try {
+                const result = eval(expression);
+                addMessage(`The result of ${expression} is ${result}.`);
+            } catch (error) {
+                addMessage("There was an error calculating the expression. Please check your input.");
+            }
         }
 
-        function testInternetConnection() {
-            fetch('https://api.openweathermap.org')
-                .then(response => {
-                    if (response.ok) {
-                        addMessage("Internet connection is working.");
-                    } else {
-                        addMessage("Failed to connect to the internet.");
-                    }
-                })
-                .catch(error => {
-                    addMessage("Failed to connect to the internet.");
-                });
+        function generateRandomNumber() {
+            const randomNumber = Math.floor(Math.random() * 100) + 1; // Generates a number between 1 and 100
+            addMessage(`Here's a random number: ${randomNumber}`);
+        }
+
+        function showHelp() {
+            const helpMessage = `
+                I can help you with the following:
+                - Basic greetings like "hello" or "hi".
+                - Complex math calculations. Try "calculate 5 + 3 - 2 * 4".
+                - Generating a random number with "random number".
+                - Type "help" or "what can you do" to see this message again.
+            `;
+            addMessage(helpMessage.trim());
         }
     </script>
 </body>
