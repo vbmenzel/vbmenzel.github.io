@@ -1,35 +1,11 @@
+<!-- index.html -->>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .chat-container {
-            width: 60%;
-            margin: auto;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-        .messages {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #fff;
-        }
-        .user-input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-    </style>
+    <title>Chatbot with Enhanced Design</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="chat-container">
@@ -37,67 +13,6 @@
         <input type="text" class="user-input" id="userInput" placeholder="Type a message..." onkeydown="if(event.key === 'Enter') sendMessage()">
     </div>
 
-    <script>
-        function addMessage(text, fromUser = false) {
-            const messagesDiv = document.getElementById('messages');
-            const newMessage = document.createElement('div');
-            newMessage.textContent = (fromUser ? 'You: ' : 'Bot: ') + text;
-            messagesDiv.appendChild(newMessage);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
-        }
-
-        function sendMessage() {
-            const userInput = document.getElementById('userInput').value;
-            if (userInput.trim() === '') return;
-
-            addMessage(userInput, true);
-            respondToUser(userInput);
-            document.getElementById('userInput').value = '';
-        }
-
-        function respondToUser(inputText) {
-            const greetingPattern = /\b(hi|hello|hey)\b/i;
-            const mathPattern = /^[\d+\-*/().\s]+$/; // Matches basic math expressions without needing "calculate"
-            const randomNumberPattern = /\brandom number\b/i;
-            const helpPattern = /\b(help|what can you do|what can you do\?)\b/i;
-
-            if (greetingPattern.test(inputText)) {
-                addMessage("Hello! How can I assist you today?");
-            } else if (mathPattern.test(inputText.trim())) {
-                calculate(inputText);
-            } else if (randomNumberPattern.test(inputText)) {
-                generateRandomNumber();
-            } else if (helpPattern.test(inputText)) {
-                showHelp();
-            } else {
-                addMessage("I'm not sure how to respond to that.");
-            }
-        }
-
-        function calculate(expression) {
-            try {
-                const result = eval(expression);
-                addMessage(`The result of ${expression} is ${result}.`);
-            } catch (error) {
-                addMessage("There was an error calculating the expression. Please check your input.");
-            }
-        }
-
-        function generateRandomNumber() {
-            const randomNumber = Math.floor(Math.random() * 100) + 1; // Generates a number between 1 and 100
-            addMessage(`Here's a random number: ${randomNumber}`);
-        }
-
-        function showHelp() {
-            const helpMessage = `
-                I can help you with the following:
-                - Basic greetings like "hello" or "hi".
-                - Math calculations. Try typing a math expression like "5 + 3 - 2 * 4" directly.
-                - Generating a random number with "random number".
-                - Type "help" or "what can you do" to see this message again.
-            `;
-            addMessage(helpMessage.trim());
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
