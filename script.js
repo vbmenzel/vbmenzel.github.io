@@ -1,4 +1,3 @@
-// script.js
 let apiKey = ''; // Initialize API key variable
 
 function toggleSettings() {
@@ -18,25 +17,9 @@ function saveApiKey() {
 }
 
 async function respondToUser(inputText) {
-    const greetingPattern = /\b(hi|hello|hey)\b/i;
-    const helpPattern = /\b(help|what can you do)\b/i;
-    const clearPattern = /\b(clear)\b/i; // Clear command pattern
-    const mathPattern = /[0-9+\-*/().sqrt\s]+/i;
-
-    if (greetingPattern.test(inputText)) {
-        addMessage("Hello! How can I help you today?");
-    } else if (helpPattern.test(inputText)) {
-        addMessage("I can greet you, perform basic math calculations, and answer simple queries.");
-    } else if (clearPattern.test(inputText)) {
-        clearChat(); // Call the clear chat function
-    } else if (mathPattern.test(inputText)) {
-        evaluateMathExpression(inputText);
-    } else {
-        // Try fetching the response from the LLM if no patterns matched
-        const success = await fetchChatGPTResponse(inputText);
-        if (!success) {
-            addMessage("I'm not sure how to respond to that.");
-        }
+    const success = await fetchChatGPTResponse(inputText);
+    if (!success) {
+        addMessage("I'm not sure how to respond to that.");
     }
 }
 
@@ -88,39 +71,6 @@ function sendMessage() {
     addMessage(userInput, true);
     respondToUser(userInput);
     document.getElementById('userInput').value = '';
-}
-
-function respondToUser(inputText) {
-    const greetingPattern = /\b(hi|hello|hey)\b/i;
-    const helpPattern = /\b(help|what can you do)\b/i;
-    const clearPattern = /\b(clear)\b/i; // Clear command pattern
-    const mathPattern = /[0-9+\-*/().sqrt\s]+/i;
-
-    if (greetingPattern.test(inputText)) {
-        addMessage("Hello! How can I help you today?");
-    } else if (helpPattern.test(inputText)) {
-        addMessage("I can greet you, perform basic math calculations, and answer simple queries.");
-    } else if (clearPattern.test(inputText)) {
-        clearChat(); // Call the clear chat function
-    } else if (mathPattern.test(inputText)) {
-        evaluateMathExpression(inputText);
-    } else {
-        addMessage("I'm not sure how to respond to that.");
-    }
-}
-
-function evaluateMathExpression(expression) {
-    try {
-        // Replace "square root" with Math.sqrt() for calculation
-        const modifiedExpression = expression
-            .replace(/square root of\s*([0-9.]+)/gi, 'Math.sqrt($1)');
-
-        // Evaluate the expression
-        const result = eval(modifiedExpression);
-        addMessage(`The result of "${expression}" is ${result}.`);
-    } catch (error) {
-        addMessage("I couldn't calculate that expression.");
-    }
 }
 
 // Function to clear chat
