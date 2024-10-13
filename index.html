@@ -9,7 +9,7 @@
 <body>
     <div class="chat-container">
         <div class="messages" id="messages">
-            <div class="bot">Bot: Hello! How can I assist you today?</div>
+            <div class="bot">Hello! How can I assist you today?</div>
         </div>
         <input type="text" class="user-input" id="userInput" placeholder="Type a message..." 
             onkeydown="if(event.key === 'Enter') sendMessage()">
@@ -22,8 +22,17 @@
     <div class="overlay" id="settingsOverlay">
         <div class="overlay-content">
             <h2>Settings</h2>
-            <label for="apiKey">Groqcloud API Key:</label>
+            <label for="apiKey">ChatGPT API Key:</label>
             <input type="text" id="apiKey" placeholder="Enter your API key">
+
+            <label for="modelSelect">Select Model:</label>
+            <select id="modelSelect">
+                <option value="gpt-4o-mini">GPT-4o Mini</option>
+                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                <option value="gpt-4">GPT-4</option>
+                <option value="gpt-4.5">GPT-4.5</option>
+            </select>
+
             <button onclick="saveApiKey()">Save</button>
             <button onclick="toggleSettings()">Close</button>
         </div>

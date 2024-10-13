@@ -1,4 +1,12 @@
 let apiKey = ''; // Initialize the API key variable
+let selectedModel = 'gpt-4o-mini'; // Default model selection
+
+// Escape HTML characters to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.innerText = text; // Use innerText to escape HTML
+    return div.innerHTML; // Return the escaped HTML
+}
 
 // Toggle the visibility of the settings overlay
 function toggleSettings() {
@@ -6,9 +14,12 @@ function toggleSettings() {
     overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex'; // Show or hide the overlay
 }
 
-// Save the entered API key and provide feedback
+// Save the entered API key and selected model, provide feedback
 function saveApiKey() {
     const inputKey = document.getElementById('apiKey').value;
+    const modelSelect = document.getElementById('modelSelect');
+    selectedModel = modelSelect.value; // Save the selected model
+
     if (inputKey.trim() === '') {
         addMessage("Please enter a valid API key.", true); // Notify user to enter a valid key
     } else {
@@ -20,33 +31,25 @@ function saveApiKey() {
 
 // Respond to user input by fetching a response from the API
 async function respondToUser(inputText) {
-    const formattedInput = `Please provide a code example for: ${inputText}`;
-    const success = await fetchChatGPTResponse(formattedInput);
+    const success = await fetchChatGPTResponse(inputText); // Pass the input text directly
     if (!success) {
         addMessage("I'm not sure how to respond to that."); // Notify if response fetching failed
     }
 }
 
-function escapeHtml(html) {
-    const text = document.createElement("textarea");
-    text.innerText = html; // Set the text
-    return text.innerHTML; // Get the escaped HTML
-}
-
-
-// Fetch response from the Groq API using the provided input text
+// Fetch response from the ChatGPT API using the provided input text
 async function fetchChatGPTResponse(inputText) {
     try {
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', { 
+        const response = await fetch('https://api.openai.com/v1/chat/completions', { 
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiKey}`, // Use the saved API key
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: "llama3-8b-8192", // Specify the Llama3 model
-                messages: [{ role: "user", content: inputText }], // Format input as required by API
-                max_tokens: 256, // Adjust max tokens for response
+                model: selectedModel, // Use the selected model
+                messages: [{ role: "user", content: inputText }], // Directly send user input
+                max_tokens: 4096, // Adjust max tokens for response
                 temperature: 0.7, // Control response variability
             }),
         });
@@ -61,7 +64,7 @@ async function fetchChatGPTResponse(inputText) {
             return false; // Indicate failure
         }
     } catch (error) {
-        addMessage("Error fetching response from Groq API.", false); // Handle API fetch errors
+        addMessage("Error fetching response from ChatGPT API.", false); // Handle API fetch errors
         console.error('Error:', error); // Log the error for debugging
         return false; // Indicate failure
     }

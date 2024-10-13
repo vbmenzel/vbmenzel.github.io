@@ -202,14 +202,3 @@ body {
     z-index: 10;
     opacity: 0.8;
 }
-pre {
-    background-color: #f8f9fa; /* Light gray background for code */
-    padding: 10px; /* Padding around code */
-    border-radius: 5px; /* Rounded corners */
-    overflow-x: auto; /* Horizontal scroll if code is too wide */
-}
-
-code {
-    font-family: 'Courier New', Courier, monospace; /* Monospaced font for code */
-    white-space: pre-wrap; /* Preserve whitespace for better formatting */
-}
