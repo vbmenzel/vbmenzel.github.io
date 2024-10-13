@@ -32,7 +32,11 @@ async function respondToUser(inputText) {
     } else if (mathPattern.test(inputText)) {
         evaluateMathExpression(inputText);
     } else {
-        await fetchChatGPTResponse(inputText); // Fetch response from OpenAI API
+        // Try fetching the response from the LLM if no patterns matched
+        const success = await fetchChatGPTResponse(inputText);
+        if (!success) {
+            addMessage("I'm not sure how to respond to that.");
+        }
     }
 }
 
@@ -56,14 +60,18 @@ async function fetchChatGPTResponse(inputText) {
         if (data.choices && data.choices.length > 0) {
             const botResponse = data.choices[0].message.content; // Process the response similarly to OpenAI's API
             addMessage(botResponse);
+            return true; // Indicate the response was successfully fetched
         } else {
             addMessage("I couldn't retrieve a response from the API.", false);
+            return false; // Indicate the response was not successfully fetched
         }
     } catch (error) {
         addMessage("Error fetching response from Groq API.", false);
         console.error('Error:', error);
+        return false; // Indicate the response was not successfully fetched
     }
 }
+
 function addMessage(text, fromUser = false) {
     const messagesDiv = document.getElementById('messages');
     const newMessage = document.createElement('div');
