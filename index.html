@@ -74,7 +74,8 @@
         }
 
         function lookupWeather(location) {
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+            const corsProxy = 'https://cors-anywhere.herokuapp.com/'; // Use a CORS proxy
+            const url = `${corsProxy}https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
 
             fetch(url)
                 .then(response => {
