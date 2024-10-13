@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot with Weather Lookup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            width: 60%;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        .user-input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <input type="text" class="user-input" id="userInput" placeholder="Type a message..." onkeydown="if(event.key === 'Enter') sendMessage()">
+    </div>
+
+    <script>
+        const apiKey = 'ad1fda56fbe6a3555265a0a58dab4e5e'; // Replace with your OpenWeatherMap API key
+
+        function addMessage(text, fromUser = false) {
+            const messagesDiv = document.getElementById('messages');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = (fromUser ? 'You: ' : 'Bot: ') + text;
+            messagesDiv.appendChild(newMessage);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() === '') return;
+
+            addMessage(userInput, true);
+            respondToUser(userInput);
+            document.getElementById('userInput').value = '';
+        }
+
+        function respondToUser(inputText) {
+            const greetingPattern = /\b(hi|hello|hey)\b/i;
+            const weatherPattern = /\b(weather|forecast)\b.*\b(in|at|for)\b.*\b([a-zA-Z]+)\b/i;
+
+            if (greetingPattern.test(inputText)) {
+                addMessage("Hello! How can I help you today?");
+            } else if (weatherPattern.test(inputText)) {
+                const location = inputText.match(weatherPattern)[3];
+                lookupWeather(location);
+            } else if (/test internet/i.test(inputText)) {
+                testInternetConnection();
+            } else {
+                addMessage("I'm not sure how to respond to that.");
+            }
+        }
+
+        function lookupWeather(location) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Location not found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const weatherInfo = `The weather in ${data.name} is ${data.weather[0].description} with a temperature of ${data.main.temp}°C.`;
+                    addMessage(weatherInfo);
+                })
+                .catch(error => {
+                    addMessage("Could not find the weather for that location.");
+                });
+        }
+
+        function testInternetConnection() {
+            fetch('https://api.openweathermap.org')
+                .then(response => {
+                    if (response.ok) {
+                        addMessage("Internet connection is working.");
+                    } else {
+                        addMessage("Failed to connect to the internet.");
+                    }
+                })
+                .catch(error => {
+                    addMessage("Failed to connect to the internet.");
+                });
+        }
+    </script>
+</body>
+</html>
