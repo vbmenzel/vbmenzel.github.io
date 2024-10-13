@@ -1,20 +1,16 @@
 :root {
-    --background-color1: #eea4ea; /* Pastel pink */
-    --background-color2: #ffffff; /* White */
-    --background-color3: #92daf0; /* Pastel blue */
-    --container-color: #48a1bd; /* Pastel peach */
-    --user-message-color: #92daf0; /* Pastel yellow */
-    --bot-message-color: #eea4ea; /* Pastel red */
-    --input-background: #aae0f0; /* Deep teal */
-    --text-color: #fff; /* White text for better contrast */
-    --placeholder-color: rgba(255, 255, 255, 0.7);
-    --border-color: rgba(255, 255, 255, 0.5);
-    --shadow-color: rgba(0, 0, 0, 0.2);
-
-    /* Gradient control variables */
-    --gradient-start: 0%; /* Start position of the gradient */
-    --gradient-end: 100%; /* End position of the gradient */
-    --gradient-middle: 50%; /* Middle position of the gradient */
+    --background-color1: #dfe7fd;
+    --background-color2: #f3f4f6;
+    --background-color3: #c1c8e4;
+    --container-color: #4a90e2;
+    --user-message-color: #a5d6a7;
+    --bot-message-color: #ffcc80;
+    --input-background: #e3f2fd;
+    --text-color: #333;
+    --placeholder-color: rgba(51, 51, 51, 0.6);
+    --border-color: rgba(51, 51, 51, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.15);
+    --resize-handle-color: #4a90e2;
 }
 
 body {
@@ -26,22 +22,27 @@ body {
     margin: 0;
     background-image: linear-gradient(
         135deg,
-        var(--background-color1) var(--gradient-start),
-        var(--background-color2) var(--gradient-middle),
-        var(--background-color3) var(--gradient-end)
+        var(--background-color1) 0%,
+        var(--background-color2) 50%,
+        var(--background-color3) 100%
     );
 }
 
 .chat-container {
-    position: relative; /* Required for absolute positioning of the button */
+    position: relative;
     width: 90%;
-    max-width: 600px;
+    max-width: 1200px;
+    min-width: 300px;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 24px var(--shadow-color);
     display: flex;
     flex-direction: column;
     height: 80vh;
+    max-height: 90vh;
+    min-height: 200px;
+    resize: both;
+    overflow: auto;
     animation: fadeIn 0.5s ease;
 }
 
@@ -66,16 +67,18 @@ body {
     margin-bottom: 10px;
     padding: 10px 15px;
     border-radius: 10px;
-    max-width: 90%; /* Adjusted to use more of the space */
+    max-width: 100%;
     line-height: 1.5;
     position: relative;
+    white-space: pre-wrap; /* Preserve whitespace and allow line breaks */
 }
+
 
 .messages .user {
     background-color: var(--user-message-color);
     align-self: flex-end;
     text-align: right;
-    color: #000000;
+    color: #333;
     box-shadow: 0 2px 8px var(--shadow-color);
 }
 
@@ -83,7 +86,7 @@ body {
     background-color: var(--bot-message-color);
     align-self: flex-start;
     text-align: left;
-    color: #000000;
+    color: #333;
     box-shadow: 0 2px 8px var(--shadow-color);
 }
 
@@ -97,7 +100,7 @@ body {
     box-sizing: border-box;
     background-color: var(--input-background);
     color: var(--text-color);
-    border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+    border-radius: 0 0 12px 12px;
     transition: background-color 0.3s ease;
 }
 
@@ -106,27 +109,27 @@ body {
 }
 
 .user-input:focus {
-    background-color: #6ec8e4; /* Darker teal on focus */
+    background-color: #bbdefb;
 }
 
 #settingsButton {
-    position: absolute; /* Position the button absolutely */
-    top: 10px; /* Adjust top position */
-    right: 10px; /* Adjust right position */
-    background-color: transparent; /* Make background transparent */
-    border: none; /* Remove border */
-    cursor: pointer; /* Change cursor to pointer */
-    padding: 5px; /* Add some padding */
-    transition: background-color 0.3s; /* Smooth background change */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s;
 }
 
 #settingsButton:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .settings-icon {
-    width: 24px; /* Set the icon width */
-    height: 24px; /* Set the icon height */
+    width: 24px;
+    height: 24px;
 }
 
 /* Overlay styles */
@@ -140,49 +143,73 @@ body {
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure overlay is on top */
+    z-index: 1000;
 }
 
 .overlay-content {
-    background-color: var(--container-color); /* Use the container color for consistency */
-    color: var(--text-color); /* Set text color */
-    border-radius: 12px; /* Rounded corners */
+    background-color: var(--container-color);
+    color: var(--text-color);
+    border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    padding: 20px; /* Adjust padding */
-    max-width: 90%; /* Limit max width */
-    color: #000; /* Input text color */
+    padding: 20px;
+    max-width: 90%;
+    color: #000;
 }
 
 .overlay-content h2 {
-    margin-bottom: 15px; /* Spacing below the heading */
+    margin-bottom: 15px;
 }
 
 .overlay-content label {
-    display: block; /* Block display for labels */
-    margin: 10px 0 5px; /* Spacing for labels */
+    display: block;
+    margin: 10px 0 5px;
 }
 
 .overlay-content input[type="text"] {
-    width: calc(100% - 20px); /* Full width minus padding */
-    padding: 10px; /* Padding inside input */
-    border: 2px solid var(--border-color); /* Border color */
-    border-radius: 5px; /* Rounded corners */
-    background-color: var(--input-background); /* Match input background */
-    color: #000; /* Input text color */
-    margin-bottom: 15px; /* Spacing below input */
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--input-background);
+    color: #000;
+    margin-bottom: 15px;
 }
 
 .overlay-content button {
-    background-color: var(--user-message-color); /* Use a theme color */
-    color: #000; /* Input text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 15px; /* Padding inside buttons */
-    cursor: pointer; /* Change cursor to pointer */
-    transition: background-color 0.3s; /* Smooth background change */
+    background-color: var(--user-message-color);
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .overlay-content button:hover {
-    background-color: var(--bot-message-color); /* Darken on hover */
+    background-color: var(--bot-message-color);
+}
+
+.chat-container::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    cursor: nwse-resize;
+    z-index: 10;
+    opacity: 0.8;
+}
+pre {
+    background-color: #f8f9fa; /* Light gray background for code */
+    padding: 10px; /* Padding around code */
+    border-radius: 5px; /* Rounded corners */
+    overflow-x: auto; /* Horizontal scroll if code is too wide */
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace; /* Monospaced font for code */
+    white-space: pre-wrap; /* Preserve whitespace for better formatting */
 }
